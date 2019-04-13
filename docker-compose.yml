@@ -1,0 +1,22 @@
+version: "3"
+services:
+  simple-app:
+    container_name: simple-app
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3005:3004"
+    links:
+      - simple-app-mongo
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules # Remove this if you have pure JS dependencies
+  simple-app-mongo:
+    container_name: simple-app-mongo
+    image: mongo
+    expose:
+      - "27017"

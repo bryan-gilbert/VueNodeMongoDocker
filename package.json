@@ -1,0 +1,21 @@
+{
+  "name": "simple-app",
+  "version": "1.0.0",
+  "description": "Demonstrate a simple express app with mongoDb using Docker",
+  "keywords": [],
+  "author": "Bryan Gilbert",
+  "license": "ISC",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "start.dev": "nodemon -L"
+  },
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "mongoose": "^5.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.11"
+  }
+}
