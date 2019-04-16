@@ -1,22 +1,27 @@
 version: "3"
 services:
   simple-app:
-    container_name: simple-app
+    # Docker container names must be unique, so don't use container_name if you want to scale your services
+    # container_name: simple-app
     restart: always
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     ports:
-      - "3005:3004"
-    links:
-      - simple-app-mongo
+      - "3005:3004"  # The API service listens on 3004 but this is mapped to 3005 outside the container.
+    depends_on: # use depends_on instead of the deprecated links
+      - mevn-app-mongo
     environment:
-      NODE_ENV: development
+      - API_PORT=3004
+      - MONGO_HOST=mevn-app-mongo
+      - MONGO_PORT=27017
+      - MONGO_PWORD
+      - MONGO_DB_NAME
     volumes:
       - ./:/usr/src/app
       - /usr/src/app/node_modules # Remove this if you have pure JS dependencies
-  simple-app-mongo:
-    container_name: simple-app-mongo
+  mevn-app-mongo:
+    container_name: mevn-app-mongo
     image: mongo
     expose:
       - "27017"

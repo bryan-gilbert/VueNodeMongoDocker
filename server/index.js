@@ -2,11 +2,13 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = require('express')();
 
-const PORT = 3004
 // the service as defined in the docker-compose.yml file
-const DOCKER_MONGO_SERVICE_NAME = 'simple-app-mongo'
-const MONGO_PORT = 27017
-const dbName = 'simpleApp'
+
+const DB_PASSWORD = process.env.MONGO_PWORD
+const PORT = process.env.API_PORT
+const DOCKER_MONGO_SERVICE_NAME = process.env.MONGO_HOST
+const MONGO_PORT = process.env.MONGO_PORT
+const dbName = process.env.MONGO_DB_NAME
 const cStr = 'mongodb://'+DOCKER_MONGO_SERVICE_NAME+':' + MONGO_PORT + '/' + dbName
 
 // connect to Mongo daemon
@@ -14,7 +16,7 @@ mongoose.connect(
   cStr,
   { useNewUrlParser: true }
 )
-.then(() => console.log('MongoDB Connected on:' + cStr))
+.then(() => console.log('MongoDB Connected on:' + cStr + '\nPassword: ' + DB_PASSWORD))
 .catch(err => console.log(err));
 
 

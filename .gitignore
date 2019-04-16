@@ -1,0 +1,17 @@
+.idea
+**/node_modules/**
+**/logs/**
+package-lock.json
+logs/**
+server/bin/sessions/**
+temp/**
+**/sessions/**
+**/trash/**
+client/tests/e2e/reports/
+client/dist/**
+**\.DS_Store
+client/selenium-debug\.log
+**/coverage/**
+**/\.nyc_output/**
+client/test/e2e/**
+docs/.vuepress/dist/**
