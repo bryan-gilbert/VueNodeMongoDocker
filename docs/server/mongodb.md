@@ -2,6 +2,11 @@
 > Intention to describe how this project uses MongoDB
 
 ## Authentication
+
+Pass the root user name and password into the application via environment variables.  See the sections in the documentation 
+about [docker](/server/docker.md) 
+
+
 See
 - [https://medium.com/rahasak/enable-mongodb-authentication-with-docker-1b9f7d405a94](https://medium.com/rahasak/enable-mongodb-authentication-with-docker-1b9f7d405a94)
 - [https://docs.mongodb.com/manual/tutorial/enable-authentication/](https://docs.mongodb.com/manual/tutorial/enable-authentication/)

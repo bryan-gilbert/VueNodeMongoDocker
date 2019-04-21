@@ -1,13 +1,13 @@
 # Docs: VuePress
 
-> VuePress creates static Vue compatible Single Page Application
+> VuePress creates a static Vue compatible Single Page Application
 
 VuePress docs recommended using yarn in some situations. When I've accidentally 
 used npm there have been errors. So use yarn for the VuePress side of this project.
 
 
 ## Run
-Start this project docs
+Start the project docs in development mode:
 
 ```
 yarn docs:dev
@@ -50,6 +50,74 @@ Add scripts to package.json:
   "scripts": {
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
+  }
+}
+```
+
+## Customization
+
+Can override CSS in the file ```.vuepress/style.styl```
+
+Customize the site in ```.vuepress/config.js```.  The following illustrates how to 
+set up a project with a title, description, url base, and how to configure the default theme.
+The theme has a title bar with navigation and search; side bar navigation; and all
+sidebar file headers stay open and are visible.
+
+Assuming the directory structure is like this
+
+```
+.
+├─ README.md
+├─ server/
+│  ├─ README.md
+│  ├─ docker.md
+│  ├─ mongodb.md
+│  └─ express.md
+├─ docs/
+│  └─ README.md
+└─ client/
+   └─ README.md
+
+```
+Those README.md files will be converted into index.html files and they can be referenced
+with a path that ends in '/'.  The rest are referenced with a full absolute path.
+
+```js
+module.exports = {
+  title: 'The title',
+  description: 'key message',
+  base: "/projectDirectoryName/",
+  themeConfig: {
+    displayAllHeaders: true,
+    nav: [
+      { text: 'Home', link: '/' },
+      { text: 'Docs', link: '/docs/' },
+      { text: 'Server', link: '/server/' },
+      { text: 'Client', link: '/client/' },
+    ],
+    sidebar: [
+      {
+        title: 'Project',
+        children: [
+          '/'
+        ]
+      },
+      {
+        title: 'Docs',
+        children: [
+          '/docs/'
+        ]
+      },
+      {
+        title: 'Server',
+        children: [
+          '/server/',
+          '/server/express.md',
+          '/server/mongodb.md',
+          '/server/docker.md'
+        ]
+      }
+    ]
   }
 }
 ```

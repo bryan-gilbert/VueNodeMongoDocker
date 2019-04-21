@@ -1,14 +1,9 @@
+const path = require("path");
+
 module.exports = {
   title: 'Vue, Node, Mongo, Docker',
-  description: 'Just playing around',
+  description: 'This is a sample/template project with Dockerized Node, Express, Vue.js, MongoDB.',
   base: "/VueNodeMongoDocker/",
-  configureWebpack: {
-    resolve: {
-      alias: {
-        '@images': 'images'
-      }
-    }
-  },
   themeConfig: {
     displayAllHeaders: true,
     nav: [
@@ -34,9 +29,9 @@ module.exports = {
         title: 'Server',
         children: [
           '/server/',
-          '/server/express/',
-          '/server/mongo/',
-          '/server/docker/'
+          '/server/docker.md',
+          '/server/express.md',
+          '/server/mongodb.md'
         ]
       },
       {

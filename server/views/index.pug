@@ -1,0 +1,17 @@
+extends layout
+
+block styles
+  link(rel='stylesheet', href='/app/styles/frontend.css')
+
+block content
+  .page
+    h1=t("welcomeTo", {app})
+
+    .buttons
+      a.button(href="/login")=t("Login")
+
+  include parts/footer
+
+block scripts
+  script(src='/app/app.js')
+
