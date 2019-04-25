@@ -1,22 +1,33 @@
 'use strict'
-const chalk = require('chalk')
-const glob = require('glob')
 const fs = require('fs')
 const path = require('path')
 const debug = require('debug')('server')
 
+const DEVELOPMENT = 'development'
 
 export default class Config {
-  constructor (env) {
+  constructor(env) {
     this.env = env
-    // Validate NODE_ENV existence
-    this.validateEnvironmentVariable()
+    if (!this.env) {
+      this.env = DEVELOPMENT
+      debug(
+        'Error: NODE_ENV is not defined! Using default development environment'
+      )
+    }
 
-    // Get the default config
-    let defaultConfig = require(path.join(process.cwd(), 'src/config/env/default'))
+    const cwd = path.join(process.cwd(), 'src/config/env')
+    const defaultPath = path.join(cwd, 'default')
+    let envPath = path.join(cwd, this.env)
 
-    // Get the current config
-    let environmentConfig = require(path.join(process.cwd(), 'src/config/env/', this.env)) || {}
+    if (!fs.existsSync(envPath)) {
+      debug('Error: no config file for %s. Use development ')
+      this.env = DEVELOPMENT
+      envPath = path.join(cwd, this.env)
+    }
+
+    // Load the config
+    const defaultConfig = require(defaultPath)
+    const environmentConfig = require(envPath)
     debug('importing config for the %s environment', this.env)
 
     // Merge config files
@@ -28,67 +39,41 @@ export default class Config {
     debug('configuration ready %s', this.asStringForLog())
   }
 
-  get config () {
+  get config() {
     return this.configuration
   }
 
-  asStringForLog () {
+  asStringForLog() {
     let tmp = {}
     try {
       tmp = JSON.parse(JSON.stringify(this.configuration))
-    } catch (err) {
-      debug('Error cloning configuration %o', err)
+    } catch (error) {
+      debug('Error cloning configuration %o', error)
     }
+
     tmp.database.password = 'sanitizedFor2'
     return JSON.stringify(tmp)
-  }
-  /**
-   * Validate NODE_ENV existence
-   */
-  validateEnvironmentVariable () {
-    let environmentFiles = glob.sync('./src/config/env/' + this.env + '.js')
-    if (!environmentFiles.length) {
-      if (this.env) {
-        console.error(
-          chalk.red(
-            '+ Error: No configuration file found for "' +
-              env +
-              '" environment using development instead'
-          )
-        )
-      } else {
-        console.error(
-          chalk.red('+ Error: NODE_ENV is not defined! Using default development environment')
-        )
-      }
-      this.env = 'development'
-    }
-    // Reset console color
-    console.log(chalk.white(''))
   }
 
   /**
    * Validate Secure=true parameter can actually be turned on
    * because it requires certs and key files to be available
    */
-  static validateSecureMode (config) {
+  static validateSecureMode(config) {
     if (!config.secure || config.secure.ssl !== true) {
       return true
     }
 
-    var privateKey = fs.existsSync(path.resolve(config.secure.privateKey))
-    var certificate = fs.existsSync(path.resolve(config.secure.certificate))
+    const privateKey = fs.existsSync(path.resolve(config.secure.privateKey))
+    const certificate = fs.existsSync(path.resolve(config.secure.certificate))
 
     if (!privateKey || !certificate) {
-      console.log(
-        chalk.red('+ Error: Certificate file or key file is missing, falling back to non-SSL mode')
+      debug(
+        'Error: Certificate file or key file is missing, falling back to non-SSL mode'
       )
-      console.log(
-        chalk.red(
-          '  To create them, simply run the following from your shell: sh ./scripts/generate-ssl-certs.sh'
-        )
+      debug(
+        'To create them, simply run the following from your shell: sh ./scripts/generate-ssl-certs.sh'
       )
-      console.log()
       config.secure.ssl = false
     }
   }

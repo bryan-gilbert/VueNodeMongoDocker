@@ -28,6 +28,13 @@ Features that are ready are ![checked] and those that need work are ![unchecked]
 - ![checked] Navigation:  sidebar, header, search bar
 - ![checked] With images and relative files 
 
+
+### General
+- ![checked] Code style  use XO.  "Opinionated but configurable ESLint wrapper with lots of goodies included. Enforces strict and readable code. Never discuss code style on a pull request again! No decision-making. No .eslintrc or .jshintrc to manage. It just works!" 
+- ![unchecked] Xo with Vue (Not sure. Expect will need setup to support Vue)
+- ![unchecked] Xo with Webstorm IDE.
+- ![checked] Placeholder for internationalization.
+
 ### Server: Node, Express, MongoDB, Docker, Nginx
 
 Docker
@@ -46,7 +53,7 @@ Node, Express
 
 MongoDb 
 - ![checked] MongoDB Dockerized
-- ![unchecked] Mongo authentication
+- ![checked] Mongo authentication
 
 Nginx / Domain and Site
 - ![unchecked] Nginx proxies all access to the application

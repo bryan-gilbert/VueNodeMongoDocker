@@ -2,8 +2,8 @@ const path = require("path");
 
 module.exports = {
   title: 'Vue, Node, Mongo, Docker',
-  description: 'This is a sample/template project with Dockerized Node, Express, Vue.js, MongoDB.',
-  base: "/VueNodeMongoDocker/",
+  description: 'This is a sample/template project with Dockerized Node, Express, Vue.js, MongoDB. https://github.com/bryan-gilbert/mevnd-plate',
+  base: "/mevnd-plate/",
   themeConfig: {
     displayAllHeaders: true,
     nav: [

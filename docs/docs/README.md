@@ -24,7 +24,7 @@ yarn docs:build
 From the command line, in the project root directory, run ```./docDeply.sh```
 This builds the docs into a SPA and pushes the changes to the github.io project repro. Go view the docs online at;
 
-[https://bryan-gilbert.github.io/VueNodeMongoDocker/](https://bryan-gilbert.github.io/VueNodeMongoDocker/)
+[https://bryan-gilbert.github.io/mevnd-plate/](https://bryan-gilbert.github.io/mevnd-plate/)
 
 For more details see the VuePress docs: [VuePress Deploy Guide](https://vuepress.vuejs.org/guide/deploy.html#github-pages)
 

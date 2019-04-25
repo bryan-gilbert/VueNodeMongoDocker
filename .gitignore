@@ -16,3 +16,4 @@ client/selenium-debug\.log
 client/test/e2e/**
 docs/.vuepress/dist/**
 **/.env_*
+**/.stuffToThinkAbout/**

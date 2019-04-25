@@ -1,8 +1,8 @@
-import BaseController from './base'
 import Seedlings from '../models/seedlings'
+import BaseController from './base'
 
 export default class SeedlingsController extends BaseController {
-  constructor () {
+  constructor() {
     super(Seedlings, '_id')
   }
 }

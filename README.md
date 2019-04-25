@@ -3,7 +3,7 @@
 > a dockerized client server project 
 
 See the project documentation on line in the GitHub Pages here:
-[https://bryan-gilbert.github.io/VueNodeMongoDocker/](https://bryan-gilbert.github.io/VueNodeMongoDocker/)
+[https://bryan-gilbert.github.io/mevnd-plate/](https://bryan-gilbert.github.io/mevnd-plate/)
 
 
 To run and view the docs locally run
