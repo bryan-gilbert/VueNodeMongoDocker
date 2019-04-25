@@ -1,27 +1,25 @@
-
 class ParameterError extends Error {
-  constructor (message) {
-    super(...arguments)
+  constructor(message, ...args) {
+    super(args)
     this.name = 'ParameterError'
     this.status = 400
     this.message = message
-    // console.log('In constructor for error PE')
+    // Console.log('In constructor for error PE')
   }
 }
 
 class AssignmentMismatchError extends Error {
-  constructor (message) {
-    super(...arguments)
-    this.name = AssignmentMismatchError.NAME()
+  constructor(message, ...args) {
+    super(args)
+    this.name = 'AssignmentMismatchError'
     this.status = 400
     this.message = message
   }
-  static NAME () { return 'AssignmentMismatchError' }
 }
 
 class ConfigurationChangeError extends Error {
-  constructor (message) {
-    super(...arguments)
+  constructor(message, ...args) {
+    super(args)
     this.name = 'ConfigurationChangeError'
     this.status = 400
     this.message = message
@@ -29,14 +27,13 @@ class ConfigurationChangeError extends Error {
 }
 
 class SystemError extends Error {
-  constructor (message) {
-    super(...arguments)
+  constructor(message, ...args) {
+    super(args)
     this.name = 'SystemError'
     this.status = 500
     this.message = message
   }
 }
-
 
 /*
 Possible other error classes. To use consider setting the name and/or status properties

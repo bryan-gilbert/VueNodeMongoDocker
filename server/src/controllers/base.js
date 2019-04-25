@@ -126,7 +126,10 @@ export default class BaseController {
     const self = this
     query = query || {}
     return new Promise((resolve, reject) => {
-      if (self.err) return reject(self.err)
+      if (self.err) {
+        return reject(self.err)
+      }
+
       const q = Object.assign({}, self.baseQ, query)
       // Console.log('base.findOne q = ', q)
       self.model
