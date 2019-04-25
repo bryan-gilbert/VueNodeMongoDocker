@@ -22,9 +22,6 @@ services:
       - MONGODB_PWORD
       - MONGODB_NAME
       - SAMPLE_1
-    volumes:
-      - ./:/usr/src/app
-      - /usr/src/app/node_modules # Remove this if you have pure JS dependencies
   mevn-app-mongo:
     # container_name: mevn-app-mongo-container
     image: mongo

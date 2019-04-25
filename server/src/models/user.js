@@ -1,10 +1,8 @@
 import mongoose from 'mongoose'
-const ObjectId = mongoose.Schema.Types.ObjectId
-
 
 const Schema = new mongoose.Schema({
   email: {type: String, require: true},
-  name: { type: String },
+  name: {type: String},
   createDate: {type: Date, default: Date.now}
 })
 

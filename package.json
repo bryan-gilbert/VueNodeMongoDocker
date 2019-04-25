@@ -1,9 +1,24 @@
 {
   "scripts": {
     "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vuepress build docs",
+    "test": "xo",
+    "xo": "xo --fix"
   },
   "devDependencies": {
-    "vuepress": "^0.14.10"
+    "vuepress": "^0.14.10",
+    "xo": "^0.24.0"
+  },
+  "xo": {
+    "space": true,
+    "semicolon": false,
+    "prettier": true,
+    "rules": {
+      "no-warning-comments": 0,
+      "valid-jsdoc": 0,
+      "import/no-unassigned-import": 0,
+      "import/default": 0,
+      "import/no-unresolved": 0
+    }
   }
 }

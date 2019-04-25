@@ -1,12 +1,12 @@
-import BaseController from './base'
 import User from '../models/user'
+import BaseController from './base'
 
 export default class UserController extends BaseController {
-  constructor () {
+  constructor() {
     super(User, '_id')
   }
 
-  route () {
+  route() {
     const router = super.route()
     // ... can add class specific routing here
 

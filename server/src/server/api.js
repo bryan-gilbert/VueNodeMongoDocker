@@ -1,121 +1,176 @@
-import { Router } from 'express'
+// Import express from 'express'
 import moment from 'moment'
-import cors from 'cors'
-import dbSeeder from '../config/lib/dbSeeder'
+// Import cors from 'cors'
+import dbSeeder from '../config/lib/db-seeder'
 import UserController from '../controllers/user-controller'
 
 // Sessions and session cookies
 // express-session stores session data here on the server and only puts session id in the cookie
 const session = require('express-session')
 const FileStore = require('session-file-store')(session)
-const COOKIE_SECRET = process.env.COOKIE_SECRET || 'this is the secret for the session cookie'
-// session ids
+
+// Session ids
 const uuid = require('uuid/v4')
 
 const debug = require('debug')('server')
 
-export function apiMiddle (app, config) {
-  const fileStoreOptions = {}
-  if (config.sessionPath) {
-    fileStoreOptions.path = config.sessionPath
-  }
-  if (config.sessionTTL) {
-    fileStoreOptions.ttl = config.sessionTTL
-  }
-  app.sessionStore = new FileStore(fileStoreOptions)
-
-  app.use(
-    session({
-      genid: req => {
-        // debug('Inside the session middleware req.sessionID ' + req.sessionID)
-        return uuid()
-      },
-      cookie: { sameSite: 'lax' },
-      store: app.sessionStore,
-      secret: config.cookieSecret,
-      resave: false,
-      saveUninitialized: false
-    })
-  )
-
-  if (config.traceApiCalls) {
-    app.use(function (req, res, next) {
-      debug('Starting %o method: %s, url %s', moment().format('YYYY/MM/DD, h:mm:ss.SSS a'), req.method, req.url)
-      next()
-    })
+export default class Api {
+  constructor(app, config) {
+    this.app = app
+    this.config = config
   }
 
-  const corsOptions = setupCors(config)
-  const user = new UserController(config)
-
-
-  return Promise.resolve()
-    .then(() => {
-      if (config.seedDB) {
-        debug('seeding')
-        return dbSeeder()
-      }
-    })
-    .then(() => {
-      if (config.seedDB) {
-        debug('seeding done')
-      }
-    })
-    .then(() => {
-      const api = Router()
+  apiMiddle() {
+    const {app, config} = this
+    this._setupSession()
+    this._setupTrace()
+    return this._seeding().then(() => {
+      // Const corsOptions = this._setupCors()
+      // Const router = express.Router() // eslint-disable-line new-cap
+      const user = new UserController(config)
+      debug('Set up get for / ')
+      app.get('/', (req, res) => {
+        debug('Got middle a / request')
+        res.send('home\n')
+      })
+      app.get('/about', (req, res) => {
+        res.send('about\n')
+      })
       // Inside API
-      api.use('/user', cors(corsOptions), user.route())
-      // for use behind a proxy:
-      api.use('/api/user', cors(corsOptions), user.route())
-      return api
+      debug('Set up get for /user ')
+      app.use('/user', user.route())
+      // Router.use('/user', cors(corsOptions), user.route())
     })
-}
+  }
 
-export function apiError (app, config) {
-  // error handlers
-  app.use(logErrors)
-  app.use(clientErrorHandler)
-  app.use(errorHandler)
+  apiError() {
+    const {app} = this
+    // App.get('/', (req, res) => {
+    //   debug('Got error a / request')
+    //   res.send('from error\n')
+    // })
+    // Error handlers
+    app.use(fourOhFour)
+    app.use(logErrors)
+    app.use(clientErrorHandler)
+    app.use(errorHandler)
 
-  function logErrors (err, req, res, next) {
-    if (!err) {
-      return next()
+    function logErrors(err, req, res, next) {
+      if (!err) {
+        return next()
+      }
+
+      debug(`Error name: ${err.name} message: ${err.message}`)
+      next(err)
     }
-    debug(`Error name: ${err.name} message: ${err.message}`)
-    next(err)
-  }
 
-  function clientErrorHandler (err, req, res, next) {
-    next(err)
-    // or add custom handlers
-    // import {AssignmentMismatchError, ParameterError, SystemError} from '../utils/errors'
-    // if (err.name === AssignmentMismatchError.NAME()) {
-    //   let url = config.clientUrl + '/assignments-listing?user=' + req.user._id
-    //   url += '&error=' + err.message
-    //   res.redirect(url)
-    // } else {
-    //   next(err)
-    // }
-  }
-
-  function errorHandler (err, req, res, next) {
-    res.status(err.status || 500)
-    res.send(err.message)
-  }
-}
-
-function setupCors (config) {
-  let whitelist = [] // 'http://localhost:28000', 'http://localhost:27000']
-  whitelist.push(config.clientUrl)
-  whitelist.push(config.apiUrl)
-  const corsOptionsDelegate = function (req, callback) {
-    let corsOptions
-    if (whitelist.indexOf(req.header('Origin')) !== -1) {
-      corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
-    } else {
-      corsOptions = { origin: false } // disable CORS for this request
+    function clientErrorHandler(err, req, res, next) {
+      next(err)
+      // Or add custom handlers
+      // import {AssignmentMismatchError, ParameterError, SystemError} from '../utils/errors'
+      // if (err.name === AssignmentMismatchError.NAME()) {
+      //   let url = config.clientUrl + '/assignments-listing?user=' + req.user._id
+      //   url += '&error=' + err.message
+      //   res.redirect(url)
+      // } else {
+      //   next(err)
+      // }
     }
-    callback(null, corsOptions) // callback expects two parameters: error and options
+
+    function errorHandler(err, req, res) {
+      res.status(err.status || 500)
+      res.send(err.message)
+    }
+
+    // Catch 404 and forward to error handler
+    function fourOhFour(req, res) {
+      const {url} = req
+      const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl
+      const env = process.env.NODE_ENV
+      if (url.includes('favicon')) {
+        debug('Another request for the favicon')
+        res.status(404).send('No favicon')
+      } else {
+        const msg =
+          'Could not find "' + fullUrl + '". Environment: ' + env + '\n\n'
+        debug(msg)
+        res.status(404).send(msg)
+      }
+    }
   }
-  return corsOptionsDelegate
+
+  _setupSession() {
+    const {app, config} = this
+    const fileStoreOptions = {}
+    if (config.sessionPath) {
+      fileStoreOptions.path = config.sessionPath
+    }
+
+    if (config.sessionTTL) {
+      fileStoreOptions.ttl = config.sessionTTL
+    }
+
+    app.sessionStore = new FileStore(fileStoreOptions)
+    app.use(
+      session({
+        genid: () => {
+          // Debug('Inside the session middleware req.sessionID ' + req.sessionID)
+          return uuid()
+        },
+        cookie: {sameSite: 'lax'},
+        store: app.sessionStore,
+        secret: config.cookieSecret,
+        resave: false,
+        saveUninitialized: false
+      })
+    )
+  }
+
+  _setupCors() {
+    const {config} = this
+    const whitelist = [] // 'http://localhost:28000', 'http://localhost:27000']
+    whitelist.push(config.clientUrl)
+    whitelist.push(config.apiUrl)
+    return function(req, callback) {
+      const corsOptions = {origin: false} // Disable CORS by default
+      if (whitelist.indexOf(req.header('Origin')) >= 0) {
+        corsOptions.origin = true // Reflect (enable) the requested origin in the CORS response
+      }
+
+      callback(null, corsOptions) // Callback expects two parameters: error and options
+    }
+  }
+
+  _seeding() {
+    const {config} = this
+    return Promise.resolve()
+      .then(() => {
+        if (config.seedDB) {
+          debug('seeding')
+          return dbSeeder()
+        }
+      })
+      .then(() => {
+        if (config.seedDB) {
+          debug('seeding done')
+        }
+      })
+  }
+
+  _setupTrace() {
+    const {app, config} = this
+    config.traceApiCalls = true
+    debug('Tracing ?', config.traceApiCalls)
+    if (config.traceApiCalls) {
+      app.use((req, res, next) => {
+        debug(
+          'Starting %o method: %s, url %s',
+          moment().format('YYYY/MM/DD, h:mm:ss.SSS a'),
+          req.method,
+          req.url
+        )
+        next()
+      })
+    }
+  }
 }
