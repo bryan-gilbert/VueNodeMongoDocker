@@ -17,3 +17,4 @@ client/test/e2e/**
 docs/.vuepress/dist/**
 **/.env_*
 **/.stuffToThinkAbout/**
+/vue/my-project/**

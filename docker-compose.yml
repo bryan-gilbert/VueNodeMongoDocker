@@ -5,10 +5,10 @@ services:
     # container_name: simple-app
     restart: always
     build:
-      context: .
+      context: ./server
       dockerfile: Dockerfile
     ports:
-      - "3006:3004"  # The API service listens on 3004 but this is mapped to 3005 outside the container.
+      - "3007:3004"  # The API service listens on the second port and docker maps this to the first port for use outside the container.
     depends_on: # use depends_on instead of the deprecated links
       - mevn-app-mongo
     env_file:
