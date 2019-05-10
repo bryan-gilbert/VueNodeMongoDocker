@@ -9,7 +9,7 @@ services:
       - "8081:80"
     volumes:
       #- static-content:/usr/share/nginx/html
-      - "$PWD/vue/my-project/dist/:/usr/share/nginx/html/"
+      - "./vue/my-project/dist/:/usr/share/nginx/html/"
 
 
 #volumes:
