@@ -6,7 +6,7 @@ services:
       context: ./nginx
       dockerfile: Dockerfile
     ports:
-      - "8081:80"
+      - "80:80"
     volumes:
       #- static-content:/usr/share/nginx/html
       - "./vue/my-project/dist/:/usr/share/nginx/html/"
