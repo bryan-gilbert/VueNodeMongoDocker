@@ -1,11 +1,13 @@
 # API Server: Node, Express, Mongo
 
-> This sub-project provides the API server
+> The server sub-project provides the API server
 
-See the code in the server/src directory. The intention is for code to be self-documenting.  
-Also see the [docker](/server/docker.md) docs for more about how the containerization is managed.
+The sub-project is located in ```server/```
+The code is located in ```server/src/``` directory.
+The code should be self-documenting.
+Our [docker](/server/docker.md) docs say more about how the containerization is managed.
 
-This sub-project was initially based on 
+This sub-project borrows from 
 [https://dev.to/jay97/docker-compose-an-express-and-mongo-app-aai](https://dev.to/jay97/docker-compose-an-express-and-mongo-app-aai)
 and
 [https://nodejs.org/de/docs/guides/nodejs-docker-webapp/](https://nodejs.org/de/docs/guides/nodejs-docker-webapp/)
@@ -44,8 +46,8 @@ To test the server ```curl http://localhost:3005``` (may need to adjust the port
 [unchecked]: ../images/unchecked-20.png "unchecked"
 
 
-Nodemon monitors the start script and detects changes to the dependant code. It'll restart
-the server when it sees changes. When Nodemon is used inside a docker container it requires the use of the legacy watch flag -L
+Nodemon monitors the code for changes and restarts the server when it sees changes. When Nodemon is used inside a docker
+container it requires the use of the legacy watch flag -L
 ```
     ...
   "scripts": {
@@ -60,18 +62,18 @@ the server when it sees changes. When Nodemon is used inside a docker container 
 
 ## Placeholder for I18N
 
-Add a method to the application that can be used to translate strings. Use this on the server side to translate
-strings that are sent back from the API.  It's far easier to start using this wrapper in the early stages of development
-rather than adding it later.  Decide later what package you wish to use to manage translatios.
+We add a method to the express application that can be used, in the future, to translate strings.
+It's far easier to start using this wrapper in the early stages of development
+rather than adding it later.  You can decide later what package you wish to use to manage translations.
 
-
-    // Place holder to sometime later add in i18next translation.
-    // for now define a no-op function on the app and by extension on all request objects.
-    // Usage:  req.t('some string')
-    app.t = txt => {
-      return txt
-    }
-
+```
+app = express()
+...
+// Usage:  req.t('some string') returns the same string but in the future you can translate the text
+app.t = txt => {
+  return txt
+}
+```
 
 ## Unhandled rejections and exceptions
 

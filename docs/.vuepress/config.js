@@ -9,6 +9,7 @@ module.exports = {
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Docs', link: '/docs/' },
+      { text: 'May14', link: '/may14-2019/' },
       { text: 'Server', link: '/server/' },
       { text: 'Client', link: '/client/' },
     ],
@@ -17,6 +18,13 @@ module.exports = {
         title: 'Project',
         children: [
           '/'
+        ]
+      },
+      {
+        title: 'May 14',
+        children: [
+          '/may14-2019/',
+          '/may14-2019/server'
         ]
       },
       {

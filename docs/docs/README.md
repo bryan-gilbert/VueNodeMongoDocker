@@ -1,6 +1,6 @@
 # Docs: VuePress
 
-> VuePress creates a static Vue compatible Single Page Application
+> VuePress creates a static Vue compatible Single Page Application for your project documentation.
 
 VuePress docs recommended using yarn in some situations. When I've accidentally 
 used npm there have been errors. So use yarn for the VuePress side of this project.
@@ -40,7 +40,10 @@ yarn add -D vuepress
 mkdir docs
 
 # create a markdown file
-echo '# Hello VuePress' > docs/README.md 
+echo '# Hello VuePress' > docs/README.md
+
+# run the VuePress hot swap builder and web server
+yarn docs:build  
 ```
 
 Add scripts to package.json:

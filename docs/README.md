@@ -7,15 +7,19 @@ This project is a template / example of a Dockerized client server application. 
 project for any situation requiring a rich client with backend API supported by a database and provide a project to 
 collect, over time, a set of practical tools and techniques that represent some of the current best practices.
 
-The intention is to build a small-scale production ready sample application on the MEVN stack.  By small-scale we mean one
-server machine sufficient to prove to the world that your application is the greatest.  You'll then want to look at Kubernetes
-and/or OpenShift to scale up.
-This project is trying to bridge the gap between the many excellent tutorial sample applications and a project that combines
-these into a workable application.
+The intention is to build a small-scale production-ready sample application on the MEVN stack.  By small-scale we mean an
+application that is not yet ready for Kubernetes and/or OpenShift.  Or use this project when you're developing 
+a proof of concept application and want to focus on your development work yet know you've got a solid foundation
+under the hood. 
 
+What makes a good foundation for production?   It has be to secure, uncomplicated, easy to maintain and deploy changes.
+
+What makes a good foundation for development? It needs to be uncomplicated, easy to get around and code, provide fast
+rebuilds when code changes (hot swap).
+
+What makes a good foundation for an application?  It needs a development and production environment. It needs documentation. 
 
 ## Features
-
 Features that are ready are ![checked] and those that need work are ![unchecked]  
 
 ### Docs
@@ -29,7 +33,7 @@ Features that are ready are ![checked] and those that need work are ![unchecked]
 - ![checked] With images and relative files 
 
 
-### General
+### General project
 - ![checked] Code style  use XO.  "Opinionated but configurable ESLint wrapper with lots of goodies included. Enforces strict and readable code. Never discuss code style on a pull request again! No decision-making. No .eslintrc or .jshintrc to manage. It just works!" 
 - ![unchecked] Xo with Vue (Not sure. Expect will need setup to support Vue)
 - ![unchecked] Xo with Webstorm IDE.
@@ -42,7 +46,7 @@ Docker
 - ![checked] Hot updates during development
 - ![checked] Docker with site specific settings (e.g. mongo passwords) 
 - ![checked] Environment variable handling
-- ![unchecked] One common source for both Prod and Dev with absolutely minimal differences.
+- ![checked] One common source for both Prod and Dev with absolutely minimal differences.
 - ![unchecked] One line startup for both Prod and Dev
  
 Node, Express
@@ -61,9 +65,9 @@ Nginx / Domain and Site
 - ![unchecked] HTTPS only
 
 Production setup instructions
-- ![unchecked] Firewall blocks all ports except 80 and 443 (and ssh)
-- ![unchecked] No SSH access via root user
-- ![unchecked] No SSH access via password (SSL only) 
+- ![checked] Firewall blocks all ports except 80 and 443 (and custom ssh)
+- ![checked] No SSH access via root user
+- ![checked] No SSH access via password (PkP only) 
 
 
 ### Client: Vue, Vuex, Events
@@ -93,17 +97,14 @@ yarn docs:dev
 
 
 
-## Domain names and development
+## Local domain on Mac
 
-If working on a Mac there is away to create a temporary domain for your local testing and practice.  Assuming
-you've developed your project onto a virtual server, say, from DigitalOcean.  And assume you're project is now running and
-available on, say, http://xx.xx.xx.xx/myProject.  To set up a temporary, on-your-machine-only, domain you can edit the 
-```etc/hosts```  file and add a line
+If working on a Mac you can create a temporary domain for your local testing and practice.
+To set up a temporary, on-your-machine-only, domain edit the ```etc/hosts```  file and add
 
 ```
 xx.xx.xx.xx myDomain.com
 ``` 
-
 Then in a terminal window force the DNS system to refresh
 ```
 sudo killall -HUP mDNSResponder
