@@ -1,22 +1,26 @@
 # Server setup
 
 ## SSH Key
-On your development box use ```openssh``` to generate a public private key
+On your development box use ```ssh-keygen``` from ```openssh``` to generate a public private key.  KF is the name
+we'll give to our key files.
+
+> "the continuous increase in security requirements could very well render
+ ECDSA the de-facto solution in the future." [Comparing ECDSA vs RSA](https://www.ssl.com/article/comparing-ecdsa-vs-rsa/)
+
+Also take a read of [ECDSA](https://blog.cloudflare.com/ecdsa-the-digital-signature-algorithm-of-a-better-internet/)
+
+ 
 ```
 export KF=may14-ecdsa
-
-# Generate key, enter pass phrase when prompted
+# Generate key, enter a password or passphrase when prompted
 ssh-keygen -t ecdsa -b 256 -f $KF
-# More secure options:
-# ssh-keygen -t ecdsa -b 384
-# ssh-keygen -t ecdsa -b 521
-
-# OR with RSA
-# export KF=may14-rsa
-# ssh-keygen -t rsa -b 4096 -f may14-rsa
-
 ```
-Link copy into default key folder
+
+Basically, we've choosen a good enough key for our sample application. Consider increasing the key length if your application or server
+resources become more valuable to hackers.  Also consider using a different password/passphrase for your SSH key than
+you later use for the user on the server who can get root access.
+
+Link copy of the private and public key into the default key folder. The following is for a linux/mac user.
 
 ```
 ln -s $KF ~/.ssh/$KF
@@ -26,27 +30,33 @@ ls -al ~/.ssh
 # register ssh key in your local environment, enter passphrase when prompted
 ssh-add $KF
 
-# See the public key.  Select the text and use it below in the PKS env variable
+# When you need to copy and past the public key just cat the contents
 cat $KF.pub
 ```
 
 ## Digital Ocean server setup
 - Log onto DO
-- create a droplet; Debian, 1GB ($5/mth) Toronto or San Fran
+- create a droplet; (e.g. Debian, 1GB ($5/mth) Toronto or San Fran)
 - add ssh key (see above)
-- name Droplet 'May14 x'
+- name your new droplet
 
 
 ## First log on
 
-You might use this to generate a reasonable password for a new user. Run on your the new server.
+Even though we will block password SSH you will still need a good password for your sudo user. (```sudo user``` means a use that
+become ```root``` and run root commands). You can use the following to generate a reasonable password for a new user. This script
+might also be useful to generate a series of user accounts with difficult to hack passwords. Change the length from 8 to something
+more secure, like 15, if desired.
 ```
 # generate random password for user
-
 PW=$(date +%s|sha256sum|base64|head -c 8)
 echo ------------------ SAVE THIS: $PW
- 
 ```
+Or instead of a cryptic password you may consider a passphrases [with caution](https://security.stackexchange.com/questions/178015/passphrase-vs-password-entropy)
+Make your choice based on
+1. the value of your data
+2. remember that you'll need to type in the password everytime you log onto your server and run sudo
+
 
 Do log onto the new server copy the IP address from DO control panel and ssh in.
 
@@ -127,37 +137,40 @@ sudo su
 # enter the user password to become sudoer
 ```
 
-At this point you have a new server with a new user which can log on and run sudo commands.  Let's 
-secure the site and prevent 
-- password log on
-- change the default port
+At this point you have a new server with a new user which can log on and run sudo commands.  
+
+Let's secure the access via ssh  
+- change the ssh port to 8201 (choose a different port as you wish)
+- disable password log on
 - disable root ssh access
 - allow users in the ssh-access group to ssh onto the machine
 
 ```
-# on the server
-sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
+# on the server - secure ssh
 
-# remove the existing file. Copy the text in the local copy of sshd_config here in this documentation. Paste into the server side.
-# Paste with control characters.
-sudo rm /etc/ssh/sshd_config
-sudo nano /etc/ssh/sshd_config 
-sudo diff /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
-sudo cp /etc/ssh/sshd_config.bak /etc/ssh/sshd_config
+cd /etc/ssh
+# backup and remove the existing file ssh config file
+sudo mv sshd_config sshd_config.bak
+# create a new file
+sudo nano sshd_config 
+# Copy the text in the copy of sshd_config here in the deploy folder
+# Paste into the server side. If prompted by nano paste with control characters.
+# Save file
+sudo diff sshd_config.bak sshd_config
+# Check the differences with the following
 ```
-Add or change the following:
+OR instead of the above directly edit ```/etc/ssh/sshd_config``` and add or change the following:
 ``` 
-Port 2201
+Port 8201 
 PermitRootLogin no
 PasswordAuthentication no
+AllowGroups ssh-access
 # add this to avoid problem with multiple sshd processes
 ClientAliveInterval 600
 ClientAliveCountMax 3
-AllowGroups ssh-access
 ```
-Restart the ssh service:
 ``` 
-# on the server
+# Restart the ssh service:
 sudo service ssh restart
 ```
 
