@@ -5,7 +5,7 @@ services:
     # container_name: simple-app
     restart: always
     build:
-      context: ./server
+      context: ../server
       dockerfile: Dockerfile
     ports:
       - "3007:3004"  # The API service listens on the second port and docker maps this to the first port for use outside the container.
@@ -41,3 +41,13 @@ services:
       # - "$PWD/mongo-entrypoint/:/docker-entrypoint-initdb.d/"
     # no --auth is needed here as presence of username and password add this option automatically
     command: mongod --port ${MONGODB_PORT}
+  nginx:
+    container_name: nginx
+    build:
+      context: ../nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      #- static-content:/usr/share/nginx/html
+      - "../client/dist/:/usr/share/nginx/html/"
