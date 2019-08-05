@@ -18,3 +18,4 @@ docs/.vuepress/dist/**
 **/.env_*
 **/.stuffToThinkAbout/**
 /vue/my-project/**
+**/proseDb/**

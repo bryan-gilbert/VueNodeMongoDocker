@@ -3,9 +3,9 @@
     h2 Using socket.io on {{address}}
     template(v-if="editor && !loading")
       div(class="count") {{ count }} {{ count === 1 ? 'user' : 'users' }} connected
-      editor-content(class="editor__content", :editor="editor")
+      editor-content(class="editor-content", :editor="editor")
     em(v-else) Connecting to socket server …
-    div {{ theDoc }}
+    div {{ newContent }}
 </template>
 
 <script>
@@ -34,6 +34,7 @@ export default {
       address: null,
       theDoc: {},
       count: 0,
+      newContent: ''
     }
   },
 
@@ -68,6 +69,12 @@ export default {
           }),
         ],
       })
+
+      this.editor.on('update', ({ getHTML }) => {
+        this.newContent = this.editor.getJSON()
+        console.log('got new content on update', JSON.stringify(this.newContent, null, 2))
+      })
+
     },
 
     setCount (count) {
@@ -76,9 +83,8 @@ export default {
   },
 
   mounted () {
-    const s1 = 'http://localhost:3007/'
-    const s2 = 'wss://tiptap-sockets.glitch.me'
-    this.address = s1
+
+    this.address = 'http://localhost:3007/'
     this.socket = io(this.address)
       // get the current document and its version
       .on('init', data => this.onInit(data))
@@ -129,4 +135,19 @@ export default {
       margin-right: 0.3rem;
     }
   }
+    .editor-content {
+      border: 1px solid black;
+      height: 10rem;
+      overflow-y: auto;
+
+      .ProseMirror {
+        padding: 5px;
+      }
+
+      p {
+        margin: 0;
+        padding: 0;
+      }
+    }
+
 </style>

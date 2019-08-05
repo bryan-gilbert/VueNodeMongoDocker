@@ -1,6 +1,5 @@
 <template lang="pug">
   div(class="home")
-    Wysiwyg
     Collab
 </template>
 

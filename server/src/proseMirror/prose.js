@@ -11,7 +11,7 @@ const path = require('path')
 // http.listen(3000)
 const dbl0=true
 const dbl1=true
-const dbl2=true
+const dbl2=false
 
 // setup socket server
 // https://stackoverflow.com/questions/38062689/how-do-i-get-the-http-server-from-the-express-app
@@ -50,8 +50,7 @@ const defaultData = {
 const sleep = (ms) => (new Promise(resolve => setTimeout(resolve, ms)));
 
 function storeDoc(data) {
-  if(dbl1) console.log('storeDoc', data)
-
+  if(dbl2) console.log('storeDoc', data)
   fs.writeFileSync(docPath, JSON.stringify(data, null, 2))
 }
 
