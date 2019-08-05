@@ -73,7 +73,7 @@ export default {
   },
 
   mounted () {
-    const s1 = 'http://localhost:3000/'
+    const s1 = 'http://localhost:3007/'
     const s2 = 'wss://tiptap-sockets.glitch.me'
     this.address = s1
     this.socket = io(this.address)

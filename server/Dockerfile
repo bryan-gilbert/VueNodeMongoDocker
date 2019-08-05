@@ -8,10 +8,12 @@ COPY package*.json ./
 RUN npm install
 
 # Copy the source code ...
-COPY src src
+# COPY src src
 COPY views views
 COPY index.js ./
 COPY babel.config.js ./
+COPY db.json ./
+COPY db_*.json ./
 
 # Run
 CMD [ "npm", "run", "start.dev" ]

@@ -11,6 +11,8 @@ services:
       - "3007:3004"  # The API service listens on the second port and docker maps this to the first port for use outside the container.
     depends_on: # use depends_on instead of the deprecated links
       - mevn-app-mongo
+    volumes:
+      - "../server/src/:/usr/src/app/src"
     env_file:
       - ./.env_site
     environment:

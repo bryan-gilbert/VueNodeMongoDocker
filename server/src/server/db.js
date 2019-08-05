@@ -36,7 +36,7 @@ export default function(config) {
         resolve(conn)
       })
       .catch(error => {
-        console.log(error)
+        debug('db connect error: ', error)
         reject(error)
       })
   })

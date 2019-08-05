@@ -1,22 +1,25 @@
 'use strict'
 import Config from '../config/config'
 import App from './app'
+import Prose from '../proseMirror/prose'
 
 const debug = require('debug')('server')
 
 initUnhandled()
 
-const config = new Config(process.env.NODE_ENV)
+const {config} = new Config(process.env.NODE_ENV)
 const app = new App()
 
-const configuration = config.config
 app
-  .setup(configuration)
+  .setup(config)
   .then(() => {
-    const {port} = configuration
-    app.application.listen(port, () => {
+    const {port} = config
+    let server = app.application.listen(port, () => {
       debug('Server running...' + port)
     })
+    const io = require('socket.io')(server)
+    app.prose = new Prose(app, config, io)
+
   })
   .catch(error => {
     debug('Error starting server %o', error)
