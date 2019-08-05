@@ -25,17 +25,21 @@ const dbl2=false
 // options
 const simulateSlowServerDelay = 0 // milliseconds
 // const docPath = './db.json'
-const docPath = path.join(process.cwd(), 'db.json')
+const rooPath = path.join(process.cwd(), 'src')
+const docPath = path.join(root, 'db.json')
 // const lockedPath = './db_locked.json'
-const lockedPath = path.join(process.cwd(), 'db_locked.json')
+const lockedPath = path.join(root(), 'db_locked.json')
 // const stepsPath = './db_steps.json'
-const stepsPath = path.join(process.cwd(), 'db_steps.json')
+const stepsPath = path.join(root(), 'db_steps.json')
 
-fs.readdir(process.cwd(), (err, files) => {
-  files.forEach(file => {
-    console.log(file);
+function listDbFiles() {
+  fs.readdir(process.cwd(), (err, files) => {
+    files.forEach(file => {
+      console.log(file);
+    });
   });
-});
+}
+listDbFiles()
 
 const maxStoredSteps = 1000
 const defaultData = {
@@ -67,6 +71,7 @@ function storeSteps({steps, version}) {
   ]
 
   fs.writeFileSync(stepsPath, JSON.stringify(newData))
+  listDbFiles()
 }
 
 function storeLocked(locked) {

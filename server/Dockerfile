@@ -12,8 +12,6 @@ RUN npm install
 COPY views views
 COPY index.js ./
 COPY babel.config.js ./
-COPY db.json ./
-COPY db_*.json ./
 
 # Run
 CMD [ "npm", "run", "start.dev" ]
