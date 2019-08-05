@@ -11,7 +11,7 @@ const path = require('path')
 // http.listen(3000)
 const dbl0=true
 const dbl1=true
-const dbl2=false
+const dbl2=true
 
 // setup socket server
 // https://stackoverflow.com/questions/38062689/how-do-i-get-the-http-server-from-the-express-app
@@ -25,12 +25,12 @@ const dbl2=false
 // options
 const simulateSlowServerDelay = 0 // milliseconds
 // const docPath = './db.json'
-const rooPath = path.join(process.cwd(), 'src')
-const docPath = path.join(root, 'db.json')
+const rootPath = path.join(process.cwd(), 'proseDb')
+const docPath = path.join(rootPath, 'db.json')
 // const lockedPath = './db_locked.json'
-const lockedPath = path.join(root(), 'db_locked.json')
+const lockedPath = path.join(rootPath, 'db_locked.json')
 // const stepsPath = './db_steps.json'
-const stepsPath = path.join(root(), 'db_steps.json')
+const stepsPath = path.join(rootPath, 'db_steps.json')
 
 function listDbFiles() {
   fs.readdir(process.cwd(), (err, files) => {
@@ -127,7 +127,7 @@ export default class Prose {
         // version mismatch: the stored version is newer
         // so we send all steps of this version back to the user
         if (storedData.version !== version) {
-          if(dbl2) console.log('update event. version mismatch: the stored version is newer')
+          if(dbl1) console.log('update event. version mismatch: the stored version is newer', storedData, version)
           socket.emit('update', {
             version,
             steps: getSteps(version),
@@ -156,8 +156,11 @@ export default class Prose {
         // calculating a new version number is easy
         const newVersion = version + newSteps.length
 
+        if(dbl1) console.log('update event. store steps next')
         // store data
         storeSteps({ version, steps: newSteps })
+
+        if(dbl1) console.log('update event. store doc next')
         storeDoc({ version: newVersion, doc })
 
         await sleep(simulateSlowServerDelay)

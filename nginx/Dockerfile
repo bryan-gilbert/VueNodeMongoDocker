@@ -1,6 +1,22 @@
 FROM nginx
-#RUN rm /etc/nginx/conf.d/default.conf
-# COPY ../vue/my-project/dist /usr/share/nginx/html
-#COPY conf /etc/nginx
-#VOLUME /usr/share/nginx/html
-#VOLUME /etc/nginx
+
+ARG DOMAIN
+ARG API_PORT
+
+RUN mkdir -p /usr/share/nginx/error-pages/
+WORKDIR /usr/share/nginx/error-pages/
+COPY ./custom*.html ./
+
+#WORKDIR /etc/nginx/
+#COPY ./nginx.conf ./nginx.conf
+#RUN   sed -i "s|DOMAIN|${DOMAIN}|g" ./nginx.conf
+#RUN   sed -i "s|API_PORT|${API_PORT}|g" ./nginx.conf
+
+WORKDIR /etc/nginx/sites-enabled/
+#RUN rm default.conf
+COPY ./default.conf ./default.conf
+RUN   sed -i "s|DOMAIN|${DOMAIN}|g" ./default.conf
+RUN   sed -i "s|API_PORT|${API_PORT}|g" ./default.conf
+
+#    volumes:
+#      - "./client/my-project/dist/:/usr/share/nginx/html/"

@@ -5,6 +5,7 @@
       div(class="count") {{ count }} {{ count === 1 ? 'user' : 'users' }} connected
       editor-content(class="editor__content", :editor="editor")
     em(v-else) Connecting to socket server …
+    div {{ theDoc }}
 </template>
 
 <script>
@@ -31,6 +32,7 @@ export default {
       editor: null,
       socket: null,
       address: null,
+      theDoc: {},
       count: 0,
     }
   },
@@ -38,7 +40,7 @@ export default {
   methods: {
     onInit ({ doc, version }) {
       this.loading = false
-
+      this.theDoc = doc
       if (this.editor) {
         this.editor.destroy()
       }
@@ -60,6 +62,7 @@ export default {
             debounce: 250,
             // onSendable is called whenever there are changed we have to send to our server
             onSendable: ({ sendable }) => {
+              console.log('send sendable', sendable)
               this.socket.emit('update', sendable)
             },
           }),
@@ -80,7 +83,15 @@ export default {
       // get the current document and its version
       .on('init', data => this.onInit(data))
       // send all updates to the collaboration extension
-      .on('update', data => this.editor.extensions.options.collaboration.update(data))
+      .on('update', data => {
+        console.log('recieve update event with data', data)
+        this.theDoc = data
+        try {
+          this.editor.extensions.options.collaboration.update(data)
+        } catch (error) {
+          console.log('Update failed', error.message)
+        }
+      })
       // get count of connected users
       .on('getCount', count => this.setCount(count))
   },

@@ -1,5 +1,5 @@
 {
-	"ignore": ["node_modules", ".git", "client/**/*.*", "server/locales/**/*.*", "server/proseDb/**/*.*"],
+	"ignore": ["node_modules", ".git", "proseDb/*"],
 
 	"__exec": "nodejs-dashboard node server/dev.js",
 

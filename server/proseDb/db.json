@@ -1,0 +1,43 @@
+{
+  "version": 88,
+  "doc": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Let's start collaborating. "
+          },
+          {
+            "type": "text",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ],
+            "text": "And"
+          },
+          {
+            "type": "text",
+            "text": " more. "
+          },
+          {
+            "type": "text",
+            "marks": [
+              {
+                "type": "bold"
+              }
+            ],
+            "text": "4 Then add more"
+          },
+          {
+            "type": "text",
+            "text": " and switch to bold and back again."
+          }
+        ]
+      }
+    ]
+  }
+}

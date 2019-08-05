@@ -13,6 +13,7 @@ services:
       - mevn-app-mongo
     volumes:
       - "../server/src/:/usr/src/app/src"
+      - "../server/proseDb/:/usr/src/app/proseDb"
     env_file:
       - ./.env_site
     environment:
@@ -48,8 +49,11 @@ services:
     build:
       context: ../nginx
       dockerfile: Dockerfile
+      args:
+        - DOMAIN=localhost
+        - API_PORT=3007
     ports:
-      - "80:80"
+      - "8083:80"
     volumes:
       #- static-content:/usr/share/nginx/html
       - "../client/dist/:/usr/share/nginx/html/"
