@@ -2,6 +2,8 @@ version: "3"
 services:
   nginx:
     build:
+      context: ../nginx
+      dockerfile: Dockerfile
       args:
         - DOMAIN=jbrjga.com
     ports:
@@ -10,6 +12,9 @@ services:
     environment:
       - NODE_ENV=production
   simpleapp:
+    build:
+      context: ../server
+      dockerfile: Dockerfile
     environment:
       - NODE_ENV=production
     entrypoint:
