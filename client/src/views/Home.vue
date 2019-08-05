@@ -1,16 +1,18 @@
-<template>
-  <div class="home">
-    <Wysiwyg msg="Time to customized your Vue App" />
-  </div>
+<template lang="pug">
+  div(class="home")
+    Wysiwyg
+    Collab
 </template>
 
 <script>
 // @ is an alias to /src
 import Wysiwyg from '@/components/Wysiwyg.vue'
+import Collab from '@/components/Collab.vue'
 
 export default {
   name: 'home',
   components: {
+    Collab,
     Wysiwyg
   }
 }
