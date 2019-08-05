@@ -1,6 +1,6 @@
 <template lang="pug">
   div(class="editor")
-    h2 Using socket.io:
+    h2 Using socket.io on {{address}}
     template(v-if="editor && !loading")
       div(class="count") {{ count }} {{ count === 1 ? 'user' : 'users' }} connected
       editor-content(class="editor__content", :editor="editor")
@@ -30,6 +30,7 @@ export default {
       loading: true,
       editor: null,
       socket: null,
+      address: null,
       count: 0,
     }
   },
@@ -72,8 +73,10 @@ export default {
   },
 
   mounted () {
-    // server implementation: https://glitch.com/edit/#!/tiptap-sockets
-    this.socket = io('wss://tiptap-sockets.glitch.me')
+    const s1 = 'http://localhost:3000/'
+    const s2 = 'wss://tiptap-sockets.glitch.me'
+    this.address = s1
+    this.socket = io(this.address)
       // get the current document and its version
       .on('init', data => this.onInit(data))
       // send all updates to the collaboration extension
